@@ -234,31 +234,61 @@ class Tree {
     }
 
     rebalance() {
-        sortedArray = this.inorder();
+        const sortedArray = this.inorder();
+        this.root = null;
         BST.buildTree(sortedArray, 0, sortedArray.length - 1);
     }
 }
 
-const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
+//---------------------------------------------------------------- //
+//--------------------- Testing tree ---------------------------- //
+//-------------------------------------------------------------- //
 const BST = new Tree();
+
+// Create a binary search tree from an array of random numbers < 100
+const array = generateArray(20, 0, 100);
 const sortedArray = BST.sortArray(array);
 BST.buildTree(sortedArray, 0, sortedArray.length - 1);
 prettyPrint(BST.root);
-BST.insert(500);
-BST.insert(-10);
-prettyPrint(BST.root);
-console.log(BST.find(9));
-console.log(BST.find(999));
-BST.delete(67);
-prettyPrint(BST.root);
-BST.delete(-10);
-prettyPrint(BST.root);
+
+// Confirm that the tree is balanced
+console.log("Balanced =", BST.isBalanced());
+
+// Print out all elements in level, pre, post, and in order
 console.log(BST.levelOrder());
-console.log(BST.inorder());
 console.log(BST.preorder());
 console.log(BST.postorder());
-console.log(BST.getHeight(5));
-console.log(BST.getHeight(99));
-console.log(BST.getDepth(5));
-console.log(BST.getDepth(99));
-console.log(BST.isBalanced());
+console.log(BST.inorder());
+
+// Unbalance the tree by adding several numbers > 100
+BST.insert(234);
+BST.insert(110);
+BST.insert(435);
+BST.insert(384);
+BST.insert(500);
+prettyPrint(BST.root);
+console.log("Balanced =", BST.isBalanced());
+
+// Balance the tree again
+BST.rebalance();
+prettyPrint(BST.root);
+console.log("Balanced =", BST.isBalanced());
+
+// Print out all elements in level, pre, post, and in order.
+console.log(BST.levelOrder());
+console.log(BST.preorder());
+console.log(BST.postorder());
+console.log(BST.inorder());
+
+//-------------------------------------------------------------- //
+
+function generateArray(N, Min, Max, array = []) {
+    for (let i = 0; i < N; i++) {
+        Min = Math.ceil(Min);
+        Max = Math.floor(Max);
+        let val = Math.floor(Math.random() * (Max - Min + 1)) + Min;
+
+        array.push(Math.floor(val));
+    }
+    return array;
+}
