@@ -149,6 +149,15 @@ class Tree {
         return values;
     }
 
+    inorder(currentNode = this.root, values = []) {
+        if (currentNode != null) {
+            this.inorder(currentNode.leftChild, values);
+            values.push(currentNode.value);
+            this.inorder(currentNode.rightChild, values);
+        }
+        return values;
+    }
+
     preorder(currentNode = this.root, values = []) {
         if (currentNode != null) {
             values.push(currentNode.value);
@@ -199,6 +208,35 @@ class Tree {
             return this.getDepth(value, currentNode.leftChild, depth + 1);
         }
     }
+
+    isBalanced() {
+        if (this.checkBalance() != -1) {
+            return true;
+        }
+        return false;
+    }
+
+    checkBalance(currentNode = this.root) {
+        if (currentNode == null) {
+            return 0;
+        }
+
+        let leftSubtreeHeight = this.checkBalance(currentNode.leftChild);
+        let rightSubtreeHeight = this.checkBalance(currentNode.rightChild);
+
+        if (leftSubtreeHeight == -1) return -1;
+        if (rightSubtreeHeight == -1) return -1;
+
+        if (Math.abs(leftSubtreeHeight - rightSubtreeHeight) > 1) {
+            return -1;
+        }
+        return Math.max(leftSubtreeHeight, rightSubtreeHeight) + 1;
+    }
+
+    rebalance() {
+        sortedArray = this.inorder();
+        BST.buildTree(sortedArray, 0, sortedArray.length - 1);
+    }
 }
 
 const array = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
@@ -216,9 +254,11 @@ prettyPrint(BST.root);
 BST.delete(-10);
 prettyPrint(BST.root);
 console.log(BST.levelOrder());
+console.log(BST.inorder());
 console.log(BST.preorder());
 console.log(BST.postorder());
-console.log(BST.getHeight(8));
+console.log(BST.getHeight(5));
 console.log(BST.getHeight(99));
 console.log(BST.getDepth(5));
 console.log(BST.getDepth(99));
+console.log(BST.isBalanced());
