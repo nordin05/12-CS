@@ -1,3 +1,5 @@
+import { renderGrid } from "./DOM.js";
+
 export class Chessboard {
     constructor() {
         this.columns = 8;
@@ -7,6 +9,10 @@ export class Chessboard {
             row: [2, 2, -2, -2, 1, 1, -1, -1],
             column: [-1, 1, 1, -1, 2, -2, 2, -2],
         };
+    }
+
+    init() {
+        renderGrid();
     }
 
     createCell(x, y, dist = 0, parentCell = null) {
