@@ -1,4 +1,4 @@
-import { renderGrid } from "./DOM.js";
+import { renderGrid, addListeners } from "./DOM.js";
 
 export class Chessboard {
     constructor() {
@@ -9,10 +9,14 @@ export class Chessboard {
             row: [2, 2, -2, -2, 1, 1, -1, -1],
             column: [-1, 1, 1, -1, 2, -2, 2, -2],
         };
+        this.src = null;
+        this.dest = null;
     }
 
     init() {
         renderGrid();
+
+        addListeners(this);
     }
 
     createCell(x, y, dist = 0, parentCell = null) {
@@ -31,17 +35,19 @@ export class Chessboard {
     printMoves(finalCell) {
         let str = "";
         let currentCell = finalCell;
+        const arr = [];
         while (currentCell) {
-            str = str + `[${currentCell.x}, ${currentCell.y}] -> `;
+            arr.push(currentCell);
             currentCell = currentCell.parentCell;
         }
-        str = str.slice(0, -4);
-        return str;
+        arr.reverse();
+        arr.forEach((element) => (str = str + `[${element.x}, ${element.y}] `));
+        console.log(str);
+        return arr;
     }
 
     findShortestPath(currentCell, targetPos) {
         const queue = [currentCell];
-
         while (queue.length > 0) {
             const currentNode = queue.shift();
 
