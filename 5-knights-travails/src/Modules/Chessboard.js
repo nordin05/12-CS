@@ -1,4 +1,4 @@
-import { renderGrid, addListeners } from "./DOM.js";
+import { renderGrid, addListeners, setCellColors } from "./DOM.js";
 
 export class Chessboard {
     constructor() {
@@ -16,6 +16,7 @@ export class Chessboard {
     init() {
         renderGrid();
         addListeners(this);
+        setCellColors();
     }
 
     createCell(x, y, dist = 0, parentCell = null) {
@@ -46,7 +47,7 @@ export class Chessboard {
     printMoves(arr) {
         let str = "";
         arr.forEach((element) => (str = str + `[${element.x}, ${element.y}] `));
-        console.log(str);
+        console.log("final path:", str);
     }
 
     findShortestPath(currentCell, targetPos) {

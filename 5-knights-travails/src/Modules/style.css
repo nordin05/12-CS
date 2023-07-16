@@ -1,11 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap");
 
-/* :root {
-    --startLeft: 0px;
-    --startBottom: 0px;
-    --endLeft: 88px;
-    --endBottom: 88px;
-} */
+:root {
+    --title-col: hsl(268.62deg 18.97% 49.1%);
+    --body-bg-col: hsl(271.15deg 100% 89.8%);
+    --grid-border-col: hsl(229deg 9.69% 46.79%);
+}
 
 body,
 h1,
@@ -15,13 +14,19 @@ p {
 }
 
 body {
+    background-color: var(--body-bg-col);
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 .title {
+    color: var(--title-col);
+    text-align: center;
+
     font-size: 50px;
+    padding-bottom: 10px;
+    border-bottom: 3px solid hsl(271.15deg 29.71% 68.84%);
     margin-top: 25px;
 }
 
@@ -32,17 +37,27 @@ body {
 }
 
 .container .instructions {
+    background-color: hsl(217.14deg 100% 95.88%);
+    color: hsl(254.4deg 59.52% 67.06%);
+
     font-size: 30px;
-    margin-top: 15px;
+    font-weight: 600;
+    text-align: center;
+    letter-spacing: 2px;
+
+    border-radius: 10px;
+    padding: 5px 40px;
+    margin-top: 35px;
 }
 
 .grid {
     display: grid;
     grid-template-columns: repeat(8, 80px);
     grid-template-rows: repeat(8, 80px);
-    grid-gap: 8px;
-    margin-top: 15px;
+
+    margin-top: 35px;
     position: relative;
+    border: 7px solid var(--grid-border-col);
 }
 
 .grid .knight {
@@ -60,10 +75,6 @@ body {
     text-align: center;
     vertical-align: middle;
 
-    --startLeft: 0px;
-    --startBottom: 0px;
-    --endLeft: 88px;
-    --endBottom: 88px;
     animation-duration: 1.5s;
     animation-fill-mode: forwards;
 }

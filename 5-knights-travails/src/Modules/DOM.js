@@ -1,7 +1,12 @@
 const gridDiv = document.querySelector(".grid");
 const instructDiv = document.querySelector(".instructions");
 instructDiv.innerHTML = "Select the starting position";
+
 const knight = document.querySelector(".knight");
+knight.style.zIndex = "2";
+
+const darkCol = "hsl(229, 10%, 47%)";
+const lightCol = "hsl(229, 26%, 90%)";
 
 export function renderGrid() {
     for (let i = 7; i >= 0; i--) {
@@ -27,7 +32,9 @@ export function addListeners(BoardClass) {
 
 function cellClicked(BoardClass, element) {
     if (!BoardClass.src) {
-        element.style.backgroundColor = "red";
+        element.style.zIndex = "1";
+        element.style.backgroundColor = "hsl(27, 80%, 70%)";
+        element.style.boxShadow = "0px 0px 20px 7px hsl(27, 80%, 70%, 50%)";
 
         const cellPos = element.id.split(" ").map((str) => Number(str));
         const newCell = BoardClass.createCell(cellPos[0], cellPos[1]);
@@ -37,7 +44,9 @@ function cellClicked(BoardClass, element) {
 
         BoardClass.src = newCell;
     } else if (BoardClass.src && !BoardClass.dest) {
-        element.style.backgroundColor = "green";
+        element.style.zIndex = "1";
+        element.style.backgroundColor = "hsl(120, 44%, 57%)";
+        element.style.boxShadow = "0px 0px 20px 7px hsl(120, 44%, 57%, 50%)";
 
         const cellPos = element.id.split(" ").map((str) => Number(str));
         const newCell = BoardClass.createCell(cellPos[0], cellPos[1]);
@@ -48,7 +57,6 @@ function cellClicked(BoardClass, element) {
             newCell.x,
             newCell.y,
         ]);
-        console.log(pathArray);
         instructDiv.innerHTML = `The shortest path is ${
             pathArray.length - 1
         } moves`;
@@ -75,6 +83,7 @@ function animate(elem, pathArray, i) {
             elem.parentNode.replaceChild(newKnight, elem);
             newKnight.className = "knight";
 
+            hidePossibleMoves();
             resolve(newKnight);
         }
 
@@ -90,7 +99,7 @@ function moveBetween(array, i) {
 }
 
 function moveKnight(startPos, endPos) {
-    console.log(startPos, "->", endPos);
+    console.log("moving", startPos, "->", endPos);
 
     const start = index_to_px(startPos);
     const end = index_to_px(endPos);
@@ -112,7 +121,6 @@ function positionKnight(pos) {
 
     knight.style.left = `${coords[0]}px`;
     knight.style.bottom = `${coords[1]}px`;
-    console.log("positioning", pos, `${coords[0]}px`, `${coords[1]}px`);
     knight.style.display = "block";
 }
 
@@ -125,13 +133,33 @@ function showPossibleMoves(currentPos) {
         const y = currentPos[1] + dy[i];
         const cellDiv = findCellElement(x, y);
         if (cellDiv) {
-            const bgCol = window.getComputedStyle(cellDiv).backgroundColor;
-            console.log(bgCol);
-            if (bgCol == "rgb(250, 235, 215)") {
-                cellDiv.style.backgroundColor = "aquamarine";
+            const bgCol = cellDiv.style.backgroundColor;
+            if (
+                bgCol == "rgb(223, 225, 236)" ||
+                bgCol == "rgb(108, 112, 132)"
+            ) {
+                if (bgCol == "rgb(108, 112, 132)") {
+                    cellDiv.style.backgroundColor = "hsl(197, 29%, 65%)";
+                }
+                if (bgCol == "rgb(223, 225, 236)") {
+                    cellDiv.style.backgroundColor = "hsl(197, 49%, 79%)";
+                }
             }
         }
     }
+}
+
+function hidePossibleMoves() {
+    const cellsArray = [...document.querySelectorAll(".cell")];
+    cellsArray.forEach((element) => {
+        const bgCol = element.style.backgroundColor;
+        if (bgCol == "rgb(140, 177, 192)") {
+            element.style.backgroundColor = darkCol;
+        }
+        if (bgCol == "rgb(175, 213, 228)") {
+            element.style.backgroundColor = lightCol;
+        }
+    });
 }
 
 function findCellElement(x, y) {
@@ -140,7 +168,31 @@ function findCellElement(x, y) {
 }
 
 function index_to_px(pos) {
-    const x = pos[0] * 88;
-    const y = pos[1] * 88;
+    const x = pos[0] * 80;
+    const y = pos[1] * 80;
     return [x, y];
+}
+
+export function setCellColors() {
+    const cellsArray = [...document.querySelectorAll(".cell")];
+
+    let row = 1;
+    for (let i = 0; i < cellsArray.length; i++) {
+        if (i % 8 == 0) {
+            row = row + 1;
+        }
+        if (row % 2 == 0) {
+            if (i % 2 == 0) {
+                cellsArray[i].style.backgroundColor = lightCol;
+            } else {
+                cellsArray[i].style.backgroundColor = darkCol;
+            }
+        } else {
+            if (i % 2 == 0) {
+                cellsArray[i].style.backgroundColor = darkCol;
+            } else {
+                cellsArray[i].style.backgroundColor = lightCol;
+            }
+        }
+    }
 }
