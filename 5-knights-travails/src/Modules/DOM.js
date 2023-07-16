@@ -56,55 +56,31 @@ function cellClicked(BoardClass, element) {
     }
 }
 
-function showPossibleMoves(BoardClass, currentPos) {
-    for (let i = 0; i < 8; i++) {
-        const x = currentPos[0] + BoardClass.possibleMoves["row"][i];
-        const y = currentPos[1] + BoardClass.possibleMoves["column"][i];
-        if (BoardClass.isValidCoord(x, y)) {
-            const cell = findCellElement(x, y);
-            cell.style.backgroundColor = "aquamarine";
-        }
-    }
-}
-
-function findCellElement(x, y) {
-    const cell = document.getElementById(`${x} ${y}`);
-    return cell;
-}
-
-function positionKnight(pos) {
-    const coords = index_to_px(pos);
-
-    knight.style.left = `${coords[0]}px`;
-    knight.style.bottom = `${coords[1]}px`;
-    knight.style.display = "block";
-}
-
-function index_to_px(pos) {
-    const x = pos[0] * 88;
-    const y = pos[1] * 88;
-    return [x, y];
-}
-
-function showPathTaken(pathArray) {
+async function showPathTaken(pathArray) {
+    let knight = document.querySelector(".knight");
     let i = 0;
-    const knight = document.querySelector(".knight");
 
-    moveBetween(pathArray, i);
-    i = i + 1;
-
-    // MAKE THIS FOR LOOP
-    if (i < pathArray.length - 1) {
-        console.log(i);
-        knight.addEventListener("animationend", () => {
-            const newKnight = knight.cloneNode(true);
-            knight.parentNode.replaceChild(newKnight, knight);
-
-            newKnight.className = "knight";
-            moveBetween(pathArray, i);
-            i = i + 1;
-        });
+    for (let i = 0; i < pathArray.length - 1; i++) {
+        knight = await animate(knight, pathArray, i);
     }
+
+    const finalCell = pathArray[pathArray.length - 1];
+    positionKnight([finalCell.x, finalCell.y]);
+}
+
+function animate(elem, pathArray, i) {
+    return new Promise((resolve, reject) => {
+        function handleAnimationEnd() {
+            const newKnight = elem.cloneNode(true);
+            elem.parentNode.replaceChild(newKnight, elem);
+            newKnight.className = "knight";
+
+            resolve(newKnight);
+        }
+
+        elem.addEventListener("animationend", handleAnimationEnd);
+        moveBetween(pathArray, i);
+    });
 }
 
 function moveBetween(array, i) {
@@ -120,10 +96,51 @@ function moveKnight(startPos, endPos) {
     const end = index_to_px(endPos);
     const knight = document.querySelector(".knight");
 
+    showPossibleMoves(startPos);
     knight.style.setProperty("--startLeft", `${start[0]}px`);
     knight.style.setProperty("--startBottom", `${start[1]}px`);
     knight.style.setProperty("--endLeft", `${end[0]}px`);
     knight.style.setProperty("--endBottom", `${end[1]}px`);
 
     knight.classList.add("moving");
+}
+
+function positionKnight(pos) {
+    console.log("positioning", pos);
+    const knight = document.querySelector(".knight");
+    const coords = index_to_px(pos);
+
+    knight.style.left = `${coords[0]}px`;
+    knight.style.bottom = `${coords[1]}px`;
+    console.log("positioning", pos, `${coords[0]}px`, `${coords[1]}px`);
+    knight.style.display = "block";
+}
+
+function showPossibleMoves(currentPos) {
+    const dx = [2, 2, -2, -2, 1, 1, -1, -1];
+    const dy = [-1, 1, 1, -1, 2, -2, 2, -2];
+
+    for (let i = 0; i < 8; i++) {
+        const x = currentPos[0] + dx[i];
+        const y = currentPos[1] + dy[i];
+        const cellDiv = findCellElement(x, y);
+        if (cellDiv) {
+            const bgCol = window.getComputedStyle(cellDiv).backgroundColor;
+            console.log(bgCol);
+            if (bgCol == "rgb(250, 235, 215)") {
+                cellDiv.style.backgroundColor = "aquamarine";
+            }
+        }
+    }
+}
+
+function findCellElement(x, y) {
+    const cell = document.getElementById(`${x} ${y}`);
+    return cell;
+}
+
+function index_to_px(pos) {
+    const x = pos[0] * 88;
+    const y = pos[1] * 88;
+    return [x, y];
 }
