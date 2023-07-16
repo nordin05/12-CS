@@ -57,16 +57,12 @@ function cellClicked(BoardClass, element) {
             newCell.x,
             newCell.y,
         ]);
-        instructDiv.innerHTML = `The shortest path is ${
-            pathArray.length - 1
-        } moves`;
         showPathTaken(pathArray);
     }
 }
 
 async function showPathTaken(pathArray) {
     let knight = document.querySelector(".knight");
-    let i = 0;
 
     for (let i = 0; i < pathArray.length - 1; i++) {
         knight = await animate(knight, pathArray, i);
@@ -74,6 +70,9 @@ async function showPathTaken(pathArray) {
 
     const finalCell = pathArray[pathArray.length - 1];
     positionKnight([finalCell.x, finalCell.y]);
+    instructDiv.innerHTML = `The shortest path is ${
+        pathArray.length - 1
+    } moves`;
 }
 
 function animate(elem, pathArray, i) {
@@ -88,6 +87,7 @@ function animate(elem, pathArray, i) {
         }
 
         elem.addEventListener("animationend", handleAnimationEnd);
+        instructDiv.innerHTML = `Move ${i + 1}`;
         moveBetween(pathArray, i);
     });
 }
