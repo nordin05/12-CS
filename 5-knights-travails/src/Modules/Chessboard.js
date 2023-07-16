@@ -15,7 +15,6 @@ export class Chessboard {
 
     init() {
         renderGrid();
-
         addListeners(this);
     }
 
@@ -32,8 +31,7 @@ export class Chessboard {
         return currentPos[0] == targetPos[0] && currentPos[1] == targetPos[1];
     }
 
-    printMoves(finalCell) {
-        let str = "";
+    solutionPathArray(finalCell) {
         let currentCell = finalCell;
         const arr = [];
         while (currentCell) {
@@ -41,9 +39,14 @@ export class Chessboard {
             currentCell = currentCell.parentCell;
         }
         arr.reverse();
+        this.printMoves(arr);
+        return arr;
+    }
+
+    printMoves(arr) {
+        let str = "";
         arr.forEach((element) => (str = str + `[${element.x}, ${element.y}] `));
         console.log(str);
-        return arr;
     }
 
     findShortestPath(currentCell, targetPos) {
@@ -53,9 +56,8 @@ export class Chessboard {
 
             const currentPos = [currentNode.x, currentNode.y];
             const dist = currentNode.dist;
-            console.log(currentNode);
             if (this.targetReached(currentPos, targetPos)) {
-                return this.printMoves(currentNode);
+                return this.solutionPathArray(currentNode);
             }
 
             if (!this.visited.includes(currentPos)) {

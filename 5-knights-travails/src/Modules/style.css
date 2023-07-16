@@ -1,11 +1,89 @@
-.grid {
-    display: grid;
-    grid-template-columns: repeat(8, 60px);
-    grid-template-rows: repeat(8, 60px);
-    grid-gap: 8px;
+@import url("https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Roboto&display=swap");
+
+/* :root {
+    --startLeft: 0px;
+    --startBottom: 0px;
+    --endLeft: 88px;
+    --endBottom: 88px;
+} */
+
+body,
+h1,
+p {
+    margin: 0px;
+    font-family: "Roboto", sans-serif;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-size: 50px;
+    margin-top: 25px;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.container .instructions {
+    font-size: 30px;
     margin-top: 15px;
 }
 
-.cell {
+.grid {
+    display: grid;
+    grid-template-columns: repeat(8, 80px);
+    grid-template-rows: repeat(8, 80px);
+    grid-gap: 8px;
+    margin-top: 15px;
+    position: relative;
+}
+
+.grid .knight {
+    display: none;
+
+    font-size: 70px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+
+    height: 80px;
+    width: 80px;
+    line-height: 80px;
+
+    text-align: center;
+    vertical-align: middle;
+
+    --startLeft: 0px;
+    --startBottom: 0px;
+    --endLeft: 88px;
+    --endBottom: 88px;
+    animation-duration: 1.5s;
+    animation-fill-mode: forwards;
+}
+
+.grid .cell {
     background-color: antiquewhite;
+}
+
+.moving {
+    animation-name: move;
+}
+
+@keyframes move {
+    from {
+        bottom: var(--startBottom);
+        left: var(--startLeft);
+        animation-timing-function: cubic-bezier(0.37, -0.3, 0.54, 0.99);
+    }
+    to {
+        bottom: var(--endBottom);
+        left: var(--endLeft);
+    }
 }
