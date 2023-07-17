@@ -79,6 +79,32 @@ body {
     animation-fill-mode: forwards;
 }
 
+.grid .rows {
+    position: absolute;
+    left: -87px;
+}
+
+.grid .columns {
+    position: absolute;
+
+    display: flex;
+    flex-direction: row-reverse;
+    top: 648px;
+}
+
+.grid .rows div,
+.grid .columns div {
+    width: 80px;
+    height: 80px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 36px;
+    color: hsl(285.23deg 10% 47.06%);
+}
+
 .grid .cell {
     background-color: antiquewhite;
 }

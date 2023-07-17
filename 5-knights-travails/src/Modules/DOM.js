@@ -14,7 +14,6 @@ export function renderGrid() {
             const newCell = document.createElement("div");
             newCell.className = "cell";
             newCell.id = `${j} ${i}`;
-            newCell.innerHTML = `${j}, ${i}`;
             gridDiv.appendChild(newCell);
         }
     }
